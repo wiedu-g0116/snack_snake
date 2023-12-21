@@ -10,7 +10,7 @@ let keyPressCount = 0;
 let firework = null;
 let restartButton = document.getElementById('restart-button');
 let score = 0;
-
+let isGameOver = false; // Add a flag variable to track game state
 
 // 初始化遊戲
 function init() {
@@ -21,6 +21,7 @@ function init() {
     food = null;
     gameLoop = setInterval(draw, 150);
     restartButton.disabled = true;
+    isGameOver = false; // Reset the game over flag
 }
 
 // 繪製遊戲畫面
@@ -99,31 +100,34 @@ function gameOver() {
     restartButton.disabled = false;
     document.getElementById('score').innerHTML += '<strong>，遊戲結束</strong>';
     clearInterval(gameLoop);
+    isGameOver = true; // Set the game over flag
 }
 
 // 鍵盤事件
 window.addEventListener("keydown", function(e) {
-    switch(e.key) {
-        case "ArrowUp":
-            direction = "up";
-            break;
-        case "ArrowDown":
-            direction = "down";
-            break;
-        case "ArrowLeft":
-            direction = "left";
-            break;
-        case "ArrowRight":
-            direction = "right";
-            break;
-        // while space pressed reset keypress count
-        case " ":
-            keyPressCount = 0;
-            break;
+    if (!isGameOver) { // Only handle keyboard events when the game is not over
+        switch(e.key) {
+            case "ArrowUp":
+                direction = "up";
+                break;
+            case "ArrowDown":
+                direction = "down";
+                break;
+            case "ArrowLeft":
+                direction = "left";
+                break;
+            case "ArrowRight":
+                direction = "right";
+                break;
+            // while space pressed reset keypress count
+            case " ":
+                keyPressCount = 0;
+                break;
+        }
+        keyPressCount += 5;
+        clearInterval(gameLoop);
+        gameLoop = setInterval(draw, Math.max(50 ,150 - keyPressCount));
     }
-    keyPressCount += 5;
-    clearInterval(gameLoop);
-    gameLoop = setInterval(draw, Math.max(50 ,150 - keyPressCount));
 });
 
 restartButton.addEventListener('click', function() {
