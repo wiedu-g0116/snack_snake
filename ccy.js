@@ -128,6 +128,12 @@ window.addEventListener("keydown", function(e) {
         clearInterval(gameLoop);
         gameLoop = setInterval(draw, Math.max(50 ,150 - keyPressCount));
     }
+    else if (isGameOver && e.key === " ") { // If the game is over and the space key is pressed
+        score = 0;
+        document.getElementById('score').textContent = '分數: ' + score;
+        clearInterval(gameLoop);
+        init(); // Reset the game
+    }
 });
 
 restartButton.addEventListener('click', function() {
